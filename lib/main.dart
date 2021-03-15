@@ -1,33 +1,40 @@
 import 'dart:math';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import "package:cached_network_image/cached_network_image.dart";
 
-import 'package:flutter/material.dart';
-void main() => runApp(MyApp2());
-
-class MyApp2 extends StatelessWidget {
-  final appTitle = 'Drawer Demo';
-
+void main() => runApp(AppList());
+class AppList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appTitle = 'Drawer Demo';
     return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
+        title: appTitle,
+        home: DrawerWidget());
+  }
+}
+
+class DrawerWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final appTitle = 'Drawer Demo';
+    return  Scaffold(
       appBar: AppBar(title: Text(appTitle)),
-
-      //body: Center(child: Text('My Page!')),
-       // body:GridViewScreen(),
-        body: DataTableScreen(),
-
+      body: Center(child: Text('Demo')),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(child: Text('Drawer Header'), decoration: BoxDecoration( color: Colors.blue ) ),
-            ListTile(title: Text('Item 1'),  onTap: () { Navigator.pop(context);  } ),
-            ListTile(title: Text('Item 2'),  onTap: () { Navigator.pop(context);  } ),
+          children: [
+            DrawerHeader(child: FittedBox(fit: BoxFit.fill,
+                child: Image.network('https://i.ibb.co/df35Y8Q/2.png')) ),
+            ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
+            ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
+            ListTile(title: Text('DataTableScreen'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => DataTableScreen())); } ),
+            ListTile(title: Text('TabBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TabBarWidget())); } ),
+            ListTile(title: Text('ListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => ListTileWidget())); } ),
+            ListTile(title: Text('RadioListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => RadioListTileWidget())); } ),
+
+            ListTile(title: Text('StackWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => StackWidget())); } ),
             SizedBox(
               height: 300,
               child: ListView.builder(itemCount: 5,
@@ -39,38 +46,45 @@ class MyApp2 extends StatelessWidget {
               ),
             )
           ],
-        ), ), ));
+        ), ), );
   }
 }
-class GridViewScreen extends StatelessWidget {
+class GridViewBuilderScreen extends StatelessWidget {
   final List<Map> myProducts =
   List.generate(1000, (index) => {"id": index, "name": "Product $index"})
       .toList();
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Scaffold(
+        appBar: AppBar(title: const Text('GridView.builder Widget')),
+    body:Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
-
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-            ),
-            /*gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 20),*/
-
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, ),
             itemCount: myProducts.length,
             itemBuilder: (BuildContext ctx, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container( alignment: Alignment.center,
-                  child: Text(myProducts[index]["name"]),
-                  decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(15)) ),
-              );
-            }));
+              return Card(child: Text(myProducts[index]["name"]));
+            })));
+  }
+}
+class GridViewCountScreen extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text('GridView.count Widget')),
+        body: GridView.count(
+          crossAxisCount: 3,
+          children: [
+            Card(child: Text("He'd have you all unravel ")),
+            Card(child: Text('Heed not the rabble')),
+            Card(child: Text('Sound of screams but the')),
+            Card(child: Text('Who scream')),
+            Card(child: Text('Revolution is coming...')),
+            Card(child: Text('Revolution, they...')),
+          ],
+        ));
   }
 }
 class DataTableScreen extends StatelessWidget {
@@ -81,7 +95,9 @@ class DataTableScreen extends StatelessWidget {
       return {"id": i, "name": "Product $i", "price": Random().nextInt(200) + 1};
     });
 
-      return  Container(
+      return Scaffold(
+        appBar: AppBar(title: const Text('DataTable Widget')),
+    body: Container(
             width: double.infinity,
             child: SingleChildScrollView(
               child: DataTable(
@@ -99,19 +115,36 @@ class DataTableScreen extends StatelessWidget {
                   ]);
                 }).toList(),
               ),
-          ));
+          )));
     }
 
   }
 
-
-
-//--------------
-class MyApp1 extends StatelessWidget {
+class TabBarWidget extends StatelessWidget {
+  const TabBarWidget({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Flutter Code Sample',
-        home: Scaffold(
+    return DefaultTabController(initialIndex: 1,length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('TabBar Widget'),
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(text:'xxxx',icon: Icon(Icons.cloud_outlined)),
+              Tab(icon: Icon(Icons.beach_access_sharp)),
+              Tab(icon: Icon(Icons.brightness_5_sharp)),
+            ], ),),
+        body: const TabBarView(
+          children: <Widget>[
+            Center(child: Text('It\'s cloudy here')),
+            Center(child: Text('It\'s rainy here')),
+            Center(child: Text('It\'s sunny here') ),
+          ])));}}
+
+class ListTileWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
             appBar: AppBar(title: Text('Card & ListTile Example') ),
             body: Card(
                 child: Column(
@@ -130,17 +163,136 @@ class MyApp1 extends StatelessWidget {
                           TextButton( child: const Text('LISTEN'), onPressed: () {/* ... */}, ),
                           SizedBox(width: 8),
                         ],
-                      ) ] ) )));
+                      ) ] ) ));
   }}
-//-----------------
+
+  class RadioListTileWidget extends StatefulWidget {
+    @override
+    _RadioButtonWidgetState createState() => _RadioButtonWidgetState();
+  }
+  
+  class _RadioButtonWidgetState extends State<RadioListTileWidget> {
+    @override
+    String _character = '';
+    TextEditingController nameController = TextEditingController();
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+          appBar: AppBar(title: const Text('TabBar Widget')),
+          body: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Text('Selected Answer: ' + _character.toString()),
+                Text('Textbox text: ' + nameController.text),
+                RadioListTile(title: const Text('aaaa'),
+                  value: 'a',
+                  groupValue: _character,
+                  onChanged: (String value) {
+                    setState(() {
+                      _character = value;
+                    });
+                  },
+                ),
+                RadioListTile(title: const Text('bbbbbb'),
+                  value: 'b',
+                  groupValue: _character,
+                  onChanged: (String value) {
+                    setState(() {
+                      _character = value;
+                    });
+                  },
+                ),
+
+                SizedBox(height: 30,)
+                ,
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Theme(data: new ThemeData(
+                    primaryColor: Colors.blueAccent,
+                    primaryColorDark: Colors.blue,),
+                    child: new TextField(
+                      decoration: new InputDecoration(
+                                                      border: new OutlineInputBorder(borderSide: new BorderSide(color: Colors.teal)),
+                                                      hintText: 'hint Text',
+                                                      helperText: 'helper Text',
+                                                      labelText: 'label Text',
+                                                      prefixIcon: const Icon(Icons.person, color: Colors.blue,),
+                                                      prefixText: ' ',
+                                                      suffixText: 'USD',
+                                                      suffixStyle: const TextStyle(color: Colors.blue)),
+                      controller: nameController,
+                    ),),
+                ),
+
+                SizedBox(height: 30,),
+
+                SizedBox(width: 300,
+                    child: ElevatedButton.icon(
+                      label: Text('Submit'),
+                      icon: Icon(Icons.web),
+                      onPressed: () {
+                        print('Pressed');
+                      },
+                    )),
 
 
-//------------------------
-void mainxx() {
-  runApp(MyApp());
-}
+                SizedBox(height: 10,),
 
-class MyApp extends StatelessWidget {
+
+                SizedBox(width: 300,
+                    child: ElevatedButton(
+                      child: Text('Reset'),
+                      onPressed: () {
+                        print('Pressed');
+                      },
+                    )),
+
+
+                SizedBox(width: 300,
+                    child: OutlinedButton(
+                      child: Text('AlertDialog'),
+                      onPressed: () { print('help...........................');
+                      showDialog(context: context,builder:(_)=> dialogWidget() );
+                      },
+                    )),
+
+
+                SizedBox(width: 300,
+                  child: OutlinedButton.icon(
+                    label: Text('Exit'),
+                    icon: Icon(Icons.web),
+                    onPressed: () {
+                      var snackBar = SnackBar(content: Text('Textbox value='+nameController.text));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    },
+                  ),
+                ),
+
+
+              ],
+            ),
+          ));
+    }
+  }
+  class dialogWidget extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return AlertDialog(
+        title: Text('Alert'),
+        content:Text('AlertDialog content'),
+        actions: <Widget>[
+          TextButton(
+            child: Text('ok'),
+            onPressed: () { Navigator.of(context).pop(); },
+          ),
+        ],
+      );
+    }
+  }
+
+  
+class StackWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -172,7 +324,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
 class Foreground extends StatelessWidget {
   const Foreground({
     Key key,
@@ -263,6 +414,12 @@ class Foreground extends StatelessWidget {
   }
 }
 class ImgRow extends StatelessWidget {
+
+  final locations = [
+    Location(text: 'New York',timing: '10:44 am',temperature: 15, weather: 'Cloudy',imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
+    Location(text: 'San Francisco', timing: '7:44 am', temperature: 6, weather: 'Raining', imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -299,8 +456,5 @@ class Location {
   Location({ this.text,  this.timing,  this.temperature, this.weather, this.imageUrl,   });
 }
 
-final locations = [
-  Location(text: 'New York',timing: '10:44 am',temperature: 15, weather: 'Cloudy',imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
-  Location(text: 'San Francisco', timing: '7:44 am', temperature: 6, weather: 'Raining', imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
-];
+
 
