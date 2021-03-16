@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import "package:cached_network_image/cached_network_image.dart";
+import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 
 void main() => runApp(AppList());
 class AppList extends StatelessWidget {
@@ -15,6 +18,14 @@ class AppList extends StatelessWidget {
 }
 
 class DrawerWidget extends StatelessWidget {
+  _launch(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print("Not supported");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Drawer Demo';
@@ -27,28 +38,56 @@ class DrawerWidget extends StatelessWidget {
           children: [
             DrawerHeader(child: FittedBox(fit: BoxFit.fill,
                 child: Image.network('https://i.ibb.co/df35Y8Q/2.png')) ),
+
+
+            ListTile(
+              leading: CircleAvatar(backgroundImage: NetworkImage("https://i1.wp.com/codesundar.com/wp-content/uploads/2019/08/cropped-codesundar-favicon.png")),
+              title: Text("Rafie Tarabay"),
+              subtitle: Text("eng_rafie@mans.edu.eg"),
+            ),
+            ListTile(leading: Icon(Icons.home), title: Text("Home Tel"),onTap: (){_launch('tel:+919952313535');},),
+            ListTile(leading: Icon(Icons.grid_on), title: Text("Website"),onTap: (){_launch('https://google.com');}),
+            ListTile(leading: Icon(Icons.contacts), title: Text("Contact Us (SMS)"),onTap: (){_launch('sms:+919952313535');}),
+
+
+
+            ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
             ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
             ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
             ListTile(title: Text('DataTableScreen'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => DataTableScreen())); } ),
             ListTile(title: Text('TabBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TabBarWidget())); } ),
+            ListTile(title: Text('AppBar_leading_actions_bottom_TabBar'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AppBar_leading_actions_bottom_TabBar())); } ),
+            ListTile(title: Text('BottomNavigationBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => BottomNavigationBarWidget())); } ),
             ListTile(title: Text('ListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => ListTileWidget())); } ),
+            ListTile(title: Text('AlertDialog_SnackBar_Button'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AlertDialog_SnackBar_Button())); } ),
             ListTile(title: Text('RadioListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => RadioListTileWidget())); } ),
-
+            ListTile(title: Text('TextFormField_vs_TextField_Widget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TextFormField_vs_TextField_Widget())); } ),
+            ListTile(title: Text('HTTPloadData'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => HTTPloadData())); } ),
+            ListTile(title: Text('FormWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FormWidget())); } ),
             ListTile(title: Text('StackWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => StackWidget())); } ),
-            SizedBox(
-              height: 300,
-              child: ListView.builder(itemCount: 5,
-                itemBuilder: (context,i){
+            ListTile(title: Text('Exam'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => Exam())); } ),
 
-                return SizedBox(height: 30, child: ListTile(title: Text('Item '+i.toString()),  onTap: () { Navigator.pop(context);  } ));
-                },
-
-              ),
-            )
           ],
         ), ), );
   }
 }
+
+class ListView_builderWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar:AppBar(
+          title:Text('ListView_builderWidget')) ,
+
+          body:ListView.builder(itemCount: 5,
+            itemBuilder: (context,i){
+              return Text('Item '+i.toString());
+            },
+          ),
+    );
+  }
+}
+
 class GridViewBuilderScreen extends StatelessWidget {
   final List<Map> myProducts =
   List.generate(1000, (index) => {"id": index, "name": "Product $index"})
@@ -141,6 +180,83 @@ class TabBarWidget extends StatelessWidget {
             Center(child: Text('It\'s sunny here') ),
           ])));}}
 
+class AppBar_leading_actions_bottom_TabBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("leading_actions_bottom"),
+          leading: Icon(Icons.menu),
+          backgroundColor: Colors.teal[700],
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.search), onPressed: () => { }),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: () => { })
+          ],
+          bottom: TabBar(
+            indicatorColor: Colors.yellow,
+            tabs: <Widget>[
+              Tab(text: "Chats", icon:  Icon(Icons.chat)),
+              Tab(text: "Groups", icon: Icon(Icons.group)),
+              Tab(text: "Settings", icon: Icon(Icons.settings))
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            Center(child: Text("Chat Tab")),
+            Center(child: Text("Group Tab")),
+            Center(child: Text("Settings Tab")),
+          ],
+        ),
+      ),
+    )
+    ;
+  }
+}
+//===================================
+class BottomNavigationBarWidget extends StatefulWidget {
+  @override
+  _bottomNavigationBarState createState() => _bottomNavigationBarState();
+}
+
+class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
+  int _selectedIndex = 0;
+  List PagesList = [
+    Text('Home Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Profile Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Settings Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+  ];
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text('BottomNavigationBar Example'),
+          backgroundColor: Colors.teal
+      ),
+      body: Center(
+        child: PagesList[_selectedIndex],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          items:[
+                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home' ),
+                  BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+                  BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+                ],
+          currentIndex: _selectedIndex,
+          onTap: (int index) {
+            setState(() {  _selectedIndex = index;  });
+          },
+      ),
+    );
+  }
+}
+//=====================================================
+
 class ListTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -165,16 +281,14 @@ class ListTileWidget extends StatelessWidget {
                         ],
                       ) ] ) ));
   }}
-
-  class RadioListTileWidget extends StatefulWidget {
+//====================================================
+class RadioListTileWidget extends StatefulWidget {
     @override
     _RadioButtonWidgetState createState() => _RadioButtonWidgetState();
   }
-  
   class _RadioButtonWidgetState extends State<RadioListTileWidget> {
     @override
     String _character = '';
-    TextEditingController nameController = TextEditingController();
 
     @override
     Widget build(BuildContext context) {
@@ -184,7 +298,6 @@ class ListTileWidget extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text('Selected Answer: ' + _character.toString()),
-                Text('Textbox text: ' + nameController.text),
                 RadioListTile(title: const Text('aaaa'),
                   value: 'a',
                   groupValue: _character,
@@ -203,79 +316,215 @@ class ListTileWidget extends StatelessWidget {
                     });
                   },
                 ),
-
-                SizedBox(height: 30,)
-                ,
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Theme(data: new ThemeData(
-                    primaryColor: Colors.blueAccent,
-                    primaryColorDark: Colors.blue,),
-                    child: new TextField(
-                      decoration: new InputDecoration(
-                                                      border: new OutlineInputBorder(borderSide: new BorderSide(color: Colors.teal)),
-                                                      hintText: 'hint Text',
-                                                      helperText: 'helper Text',
-                                                      labelText: 'label Text',
-                                                      prefixIcon: const Icon(Icons.person, color: Colors.blue,),
-                                                      prefixText: ' ',
-                                                      suffixText: 'USD',
-                                                      suffixStyle: const TextStyle(color: Colors.blue)),
-                      controller: nameController,
-                    ),),
-                ),
-
-                SizedBox(height: 30,),
-
-                SizedBox(width: 300,
-                    child: ElevatedButton.icon(
-                      label: Text('Submit'),
-                      icon: Icon(Icons.web),
-                      onPressed: () {
-                        print('Pressed');
-                      },
-                    )),
-
-
-                SizedBox(height: 10,),
-
-
-                SizedBox(width: 300,
-                    child: ElevatedButton(
-                      child: Text('Reset'),
-                      onPressed: () {
-                        print('Pressed');
-                      },
-                    )),
-
-
-                SizedBox(width: 300,
-                    child: OutlinedButton(
-                      child: Text('AlertDialog'),
-                      onPressed: () { print('help...........................');
-                      showDialog(context: context,builder:(_)=> dialogWidget() );
-                      },
-                    )),
-
-
-                SizedBox(width: 300,
-                  child: OutlinedButton.icon(
-                    label: Text('Exit'),
-                    icon: Icon(Icons.web),
-                    onPressed: () {
-                      var snackBar = SnackBar(content: Text('Textbox value='+nameController.text));
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    },
-                  ),
-                ),
-
-
               ],
             ),
           ));
     }
   }
-  class dialogWidget extends StatelessWidget {
+
+//==================================================
+
+class TextFormField_vs_TextField_Widget extends StatefulWidget {
+  @override
+  _TextFormField_vs_TextField_WidgetState createState() => _TextFormField_vs_TextField_WidgetState();
+}
+
+class _TextFormField_vs_TextField_WidgetState extends State<TextFormField_vs_TextField_Widget> {
+    TextEditingController txtController1 = TextEditingController();
+    TextEditingController txtController2 = TextEditingController();
+
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+          appBar: AppBar(title: const Text('TextFormFieldWidget')),
+      body: Column(children: [
+
+
+
+        TextFormField(
+          controller: txtController1,
+          keyboardType: TextInputType.emailAddress,
+
+          decoration: const InputDecoration(
+                 prefix: Text('Prefix'),
+                 suffix: Text('Suffix'),
+                 border: OutlineInputBorder(),
+               ),
+        ),
+
+
+        TextField(
+          obscureText: true, //hide txt for pw
+          keyboardType: TextInputType.numberWithOptions()
+        ),
+
+
+        TextField(
+          controller: txtController2,
+          decoration: InputDecoration(
+                                          //border: new OutlineInputBorder(borderSide: new BorderSide(color: Colors.teal)),
+                                          hintText: 'hint Text',
+                                          helperText: 'helper Text',
+                                          labelText: 'label Text',
+                                          prefixIcon: const Icon(Icons.person, color: Colors.blue,),
+                                          prefixText: ' ',
+                                          suffixText: 'USD',
+                                          suffixStyle: const TextStyle(color: Colors.blue)),
+        ),
+
+        OutlinedButton.icon(
+          label: Text('Show txt value'),
+          icon: Icon(Icons.web),
+          onPressed: () {
+            var snackBar = SnackBar(content: Text('txt value:'+txtController1.text+'---'+txtController2.text));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          },
+        )
+
+        ]));
+    }
+}
+//============================================
+class HTTPloadData extends StatefulWidget {
+  @override
+  _HTTPloadDataState createState() => _HTTPloadDataState();
+}
+
+class _HTTPloadDataState extends State<HTTPloadData> {
+
+  List _users = [];
+  getUsers() async {
+
+    setState(() {
+      _users = ['loading'];
+    });
+
+    http.get(Uri.parse('https://reqres.in/api/users')).then((res) {
+      Map userData = json.decode(res.body);
+      setState(() {
+        _users = userData["data"];
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Users"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () => getUsers(),
+          )
+        ],
+      ),
+      body: (_users.length == 0) ? Center(child: Text("No user Found"))
+          :(_users.length == 1 && _users[0]=='loading') ? Center(child: CircularProgressIndicator())
+          :  ListView.builder(
+        itemCount: _users.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: CircleAvatar(backgroundImage: NetworkImage(_users[index]['avatar'])),
+            title: Text(_users[index]['first_name'] + " " +  _users[index]['last_name']),
+            subtitle: Text(_users[index]['email']),
+          );
+        },
+      ),
+    );
+  }
+}
+
+//============================================
+/*
+to add validation to a form
+1- Create a Form with a GlobalKey.
+2- Add Form Fields with validation logic.
+3- Create a button to validate and submit the form.
+*/
+class FormWidget extends StatefulWidget {
+  @override
+  _FormWidgetState createState() => _FormWidgetState();
+}
+class _FormWidgetState extends State<FormWidget> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text('Form Widget')),
+        body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      else
+                        return null;
+                    },
+                  ),
+                  ElevatedButton(
+                    child: Text('Submit'),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        // submit form
+                      }
+                    },
+                  ),
+                ],
+              ),
+            )));
+  }
+}
+//=============================================
+  class AlertDialog_SnackBar_Button extends StatelessWidget {
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+          appBar: AppBar(
+              title: const Text('AlertDialog_SnackBar_Button')),
+          body: Column(children: [
+
+            ElevatedButton.icon(
+              label: Text('ElevatedButton.icon'),
+              icon: Icon(Icons.web),
+              onPressed: () {},
+            ),
+            ElevatedButton(
+              child: Text('ElevatedButton'),
+              onPressed: () {},
+            ),
+
+            OutlinedButton(
+              child: Text('OutlinedButton+AlertDialog'),
+              onPressed: () {
+                              showDialog(
+                                            context: context,
+                                            builder: (_) => my_dialogWidget()
+                                        );
+              },
+            ),
+
+
+            OutlinedButton.icon(
+              label: Text('OutlinedButton.icon+SnackBar'),
+              icon: Icon(Icons.web),
+              onPressed: () {
+                              var snackBar = SnackBar(content: Text('Process your request'));
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            },
+            )
+          ]
+          ));
+    }
+  }
+  class my_dialogWidget extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
       return AlertDialog(
@@ -291,7 +540,7 @@ class ListTileWidget extends StatelessWidget {
     }
   }
 
-  
+ //=============================================
 class StackWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -304,7 +553,6 @@ class StackWidget extends StatelessWidget {
     );
   }
 }
-
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -447,14 +695,95 @@ class ImgRow extends StatelessWidget {
                 )]))]);
   }
 }
-
-
-
 class Location {
   final String text,timing,weather,imageUrl;
   final int temperature;
   Location({ this.text,  this.timing,  this.temperature, this.weather, this.imageUrl,   });
 }
+//=========================================
+final _questions = const [
+  {
+    'questionText': '1- What\'s your favorite color?',
+    'answers': [
+      {'text': 'Black', 'score': 10},
+      {'text': 'Red', 'score': 5},
+      {'text': 'Green', 'score': 3},
+      {'text': 'White', 'score': 1},
+    ],
+  },
+  {
+    'questionText': '2- What\'s your favorite animal?',
+    'answers': [
+      {'text': 'Rabbit', 'score': 3},
+      {'text': 'Snake', 'score': 11},
+      {'text': 'Elephant', 'score': 5},
+      {'text': 'Lion', 'score': 9},
+    ],
+  },
+  {
+    'questionText': '3- Who\'s your favorite instructor?',
+    'answers': [
+      {'text': 'a', 'score': 1},
+      {'text': 'b', 'score': 1},
+      {'text': 'c', 'score': 1},
+      {'text': 'd', 'score': 1},
+    ],
+  },
+];
 
+class Exam extends StatefulWidget {
+  @override
+  _ExamState createState() => _ExamState();
+}
 
+class _ExamState extends State<Exam> {
+  bool done=false;
+  @override
+  Widget build(BuildContext context) {
+    List answers= _questions[Current.currentQindex]['answers'];
 
+    return Scaffold(
+        appBar: AppBar(  title: const Text('Exam')  ),
+        body: (done)?
+             Center(child:Text('Score:'+Current.currentScore.toString()))
+             :
+             Column( children:
+                [
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Card(child:Text(_questions[Current.currentQindex]['questionText'])),
+                 ),
+                  ...answers.map((answer) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child:ElevatedButton(
+                          child: Text(answer['text']),
+                          onPressed: () {
+                            Current.currentScore+=answer['score'];
+                            if(Current.currentQindex< _questions.length-1) {
+                              setState(() {
+                                Current.currentQindex++;
+                              });
+                            }
+                            else
+                              {
+                                  setState(() {
+                                    done=true;
+                                  });
+                              }
+                          }
+                      ),
+                    );
+                  } ).toList()
+               ]
+
+             )
+    );
+  }
+}
+
+class Current
+{
+  static int currentQindex=0;
+  static int currentScore=0;
+}
