@@ -109,7 +109,10 @@ class DrawerWidget extends StatelessWidget {
             ListTile(title: Text('myCustomCalander'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
             ListTile(title: Text('stepperWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => stepperWidget())); } ),
             ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
+
             ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
+            ListTile(title: Text('GridViewBuilderScreen2'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen2())); } ),
+
             ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
             ListTile(title: Text('DataTableScreen'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => DataTableScreen())); } ),
             ListTile(title: Text('TabBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TabBarWidget())); } ),
@@ -119,7 +122,7 @@ class DrawerWidget extends StatelessWidget {
             ListTile(title: Text('AlertDialog_SnackBar_Button'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AlertDialog_SnackBar_Button())); } ),
             ListTile(title: Text('RadioListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => RadioListTileWidget())); } ),
             ListTile(title: Text('TextFormField_vs_TextField_Widget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TextFormField_vs_TextField_Widget())); } ),
-            ListTile(title: Text('HTTPloadData'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => HTTPloadData())); } ),
+            ListTile(title: Text('http + LayoutBuilder'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => HTTPloadData())); } ),
             ListTile(title: Text('FormWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FormWidget())); } ),
             ListTile(title: Text('StackWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => StackWidget())); } ),
             ListTile(title: Text('Exam'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => Exam())); } ),
@@ -144,9 +147,7 @@ class ListView_builderWidget extends StatelessWidget {
   }
 }
 class GridViewBuilderScreen extends StatelessWidget {
-  final List<Map> myProducts =
-  List.generate(1000, (index) => {"id": index, "name": "Product $index"})
-      .toList();
+  final List<Map> myProducts = List.generate(1000, (index) => {"id": index, "name": "Product $index"}).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +163,101 @@ class GridViewBuilderScreen extends StatelessWidget {
             })));
   }
 }
+
+//=========================================
+class RandomColor {
+  Random random = Random();
+  Color getColor() {
+    return Color.fromARGB(random.nextInt(255), random.nextInt(255),
+        random.nextInt(255), random.nextInt(255));
+  }
+}
+class myTitleIconClass {
+  final String title;
+  final IconData icon;
+
+  myTitleIconClass({this.title, this.icon});
+}
+class myCardDesign extends StatelessWidget {
+  final myTitleIconClass myListItem;
+  myCardDesign({this.myListItem});
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: RandomColor().getColor(),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              myListItem.icon,
+              size: 40,
+            ),
+            Text(
+              myListItem.title,
+              style: TextStyle(
+                fontSize: 24,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class GridViewBuilderScreen2 extends StatelessWidget {
+
+  List<myTitleIconClass> myTitleIconList = [
+    myTitleIconClass(title: 'Home', icon: Icons.home),
+    myTitleIconClass(title: 'Email', icon: Icons.email),
+    myTitleIconClass(title: 'Alarm', icon: Icons.access_alarm),
+    myTitleIconClass(title: 'Wallet', icon: Icons.account_balance_wallet),
+    myTitleIconClass(title: 'Backup', icon: Icons.backup),
+    myTitleIconClass(title: 'Book', icon: Icons.book),
+    myTitleIconClass(title: 'Camera', icon: Icons.camera_alt_rounded),
+    myTitleIconClass(title: 'Person', icon: Icons.person),
+    myTitleIconClass(title: 'Print', icon: Icons.print),
+    myTitleIconClass(title: 'Phone', icon: Icons.phone),
+    myTitleIconClass(title: 'Notes', icon: Icons.speaker_notes),
+    myTitleIconClass(title: 'Music', icon: Icons.music_note_rounded),
+    myTitleIconClass(title: 'Car', icon: Icons.directions_car),
+    myTitleIconClass(title: 'Bicycle', icon: Icons.directions_bike),
+    myTitleIconClass(title: 'Boat', icon: Icons.directions_boat),
+    myTitleIconClass(title: 'Bus', icon: Icons.directions_bus),
+    myTitleIconClass(title: 'Train', icon: Icons.directions_railway),
+    myTitleIconClass(title: 'Walk', icon: Icons.directions_walk),
+    myTitleIconClass(title: 'Contact', icon: Icons.contact_mail),
+    myTitleIconClass(title: 'Duo', icon: Icons.duo),
+    myTitleIconClass(title: 'Hour', icon: Icons.hourglass_bottom),
+    myTitleIconClass(title: 'Mobile', icon: Icons.mobile_friendly),
+    myTitleIconClass(title: 'Message', icon: Icons.message),
+    myTitleIconClass(title: 'Key', icon: Icons.vpn_key),
+    myTitleIconClass(title: 'Wifi', icon: Icons.wifi),
+    myTitleIconClass(title: 'Bluetooth', icon: Icons.bluetooth),
+    myTitleIconClass(title: 'Smile', icon: Icons.sentiment_satisfied),
+    myTitleIconClass(title: 'QR', icon: Icons.qr_code),
+    myTitleIconClass(title: 'ADD', icon: Icons.add_box),
+    myTitleIconClass(title: 'Link', icon: Icons.link),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: const Text('GridView.builder Widget')),
+    body:GridView.builder(
+    shrinkWrap: true,
+    itemCount: myTitleIconList.length,
+    itemBuilder: (BuildContext context, int index) =>
+    myCardDesign(myListItem: myTitleIconList[index]),
+    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    crossAxisCount: 3,
+    mainAxisSpacing: 5.0,
+    crossAxisSpacing: 5.0,
+    ),
+    ));
+  }
+}
+//==========================================
 class GridViewCountScreen extends StatelessWidget {
 
   @override
@@ -470,8 +566,8 @@ class HTTPloadData extends StatefulWidget {
 class _HTTPloadDataState extends State<HTTPloadData> {
 
   List _users = [];
-  getUsers() async {
 
+  getUsers() async {
     setState(() {
       _users = ['loading'];
     });
@@ -486,30 +582,37 @@ class _HTTPloadDataState extends State<HTTPloadData> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Users"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => getUsers(),
-          )
-        ],
-      ),
-      body: (_users.length == 0) ? Center(child: Text("No user Found"))
-          :(_users.length == 1 && _users[0]=='loading') ? Center(child: CircularProgressIndicator())
-          :  ListView.builder(
-        itemCount: _users.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: CircleAvatar(backgroundImage: NetworkImage(_users[index]['avatar'])),
-            title: Text(_users[index]['first_name'] + " " +  _users[index]['last_name']),
-            subtitle: Text(_users[index]['email']),
-          );
-        },
-      ),
-    );
+        appBar: AppBar(
+          title: Text("LayoutBuilder + http"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: () => getUsers(),
+            )
+          ],
+        ),
+        body: LayoutBuilder(builder: (builder, constraints) {
+          if (_users.length == 0)
+            return Center(child: Text("No user Found"));
+          else if (_users.length == 1 && _users[0] == 'loading')
+            return Center(child: CircularProgressIndicator());
+          else
+            return ListView.builder(
+              itemCount: _users.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: CircleAvatar(
+                      backgroundImage: NetworkImage(_users[index]['avatar'])),
+                  title: Text(_users[index]['first_name'] + " " +
+                      _users[index]['last_name']),
+                  subtitle: Text(_users[index]['email']),
+                );
+              },
+            );
+        }
+
+        ));
   }
 }
 //============================================
