@@ -6,6 +6,12 @@ import "package:cached_network_image/cached_network_image.dart";
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
+//---------
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'  show CalendarCarousel;
+import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'package:flutter_calendar_carousel/classes/event_list.dart';
+import 'package:intl/intl.dart' show DateFormat;
+//---------
 void main() => runApp(AppList());
 class AppList extends StatelessWidget {
   @override
@@ -31,7 +37,42 @@ class DrawerWidget extends StatelessWidget {
     final appTitle = 'Drawer Demo';
     return  Scaffold(
       appBar: AppBar(title: Text(appTitle)),
-      body: Center(child: Text('Demo')),
+      body: //Center(child: Text('Demo')),
+      SingleChildScrollView(
+        child: Column(
+          children: [
+          Card(
+          color: Colors.blue,
+          child:Padding(padding: const EdgeInsets.all(8.0),
+            child: Text('Data entry form to collect all needed information to create apointment',style: TextStyle(color: Colors.white,fontSize:20)),
+          )),
+            Card(
+              color: Colors.yellow,
+              child: ListTile(
+                  leading : Icon(Icons.arrow_forward_ios),
+                  title : TextFormField(
+                    keyboardType : TextInputType.multiline,
+                    maxLines : 2,
+                    decoration : InputDecoration(hintText : "Title"),
+                    //controller : _contentEditingController,
+                  )
+              ),
+            ),
+            Card(
+              color: Colors.pink,
+              child: ListTile(
+                  leading : Icon(Icons.content_paste),
+                  title : TextFormField(
+                                          keyboardType : TextInputType.multiline,
+                                          maxLines : 8,
+                                          decoration : InputDecoration(hintText : "Content"),
+                                          //controller : _contentEditingController,
+                                      )
+              ),
+            ),
+          ],
+        ),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -39,18 +80,34 @@ class DrawerWidget extends StatelessWidget {
             DrawerHeader(child: FittedBox(fit: BoxFit.fill,
                 child: Image.network('https://i.ibb.co/df35Y8Q/2.png')) ),
 
+            InkWell(
+              onTap: () async { },
+              child: Chip(
+                  avatar : CircleAvatar(backgroundImage : AssetImage("img/ron.jpg")),
+                  backgroundColor : Colors.grey.shade300,
+                  label : Text("Active Status")
+              ),
+            ),
 
             ListTile(
-              leading: CircleAvatar(backgroundImage: NetworkImage("https://i1.wp.com/codesundar.com/wp-content/uploads/2019/08/cropped-codesundar-favicon.png")),
+              leading: CircleAvatar(backgroundImage: NetworkImage("https://i1.wp.com/codesundar.com/avicon.png")),
               title: Text("Rafie Tarabay"),
               subtitle: Text("eng_rafie@mans.edu.eg"),
+              trailing: PopupMenuButton(
+                  onSelected : (String result) { print(result); },
+                  itemBuilder : (BuildContext context) => [
+                    PopupMenuItem(value : "copy", child : Text("Copy")),
+                    PopupMenuItem(value : "cut", child : Text("Cut") ),
+                    PopupMenuItem(value : "paste", child : Text("Paste")  )
+                  ]
+              ),
             ),
             ListTile(leading: Icon(Icons.home), title: Text("Home Tel"),onTap: (){_launch('tel:+919952313535');},),
             ListTile(leading: Icon(Icons.grid_on), title: Text("Website"),onTap: (){_launch('https://google.com');}),
             ListTile(leading: Icon(Icons.contacts), title: Text("Contact Us (SMS)"),onTap: (){_launch('sms:+919952313535');}),
 
-
-
+            ListTile(title: Text('myCustomCalander'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
+            ListTile(title: Text('stepperWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => stepperWidget())); } ),
             ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
             ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
             ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
@@ -71,7 +128,6 @@ class DrawerWidget extends StatelessWidget {
         ), ), );
   }
 }
-
 class ListView_builderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -87,7 +143,6 @@ class ListView_builderWidget extends StatelessWidget {
     );
   }
 }
-
 class GridViewBuilderScreen extends StatelessWidget {
   final List<Map> myProducts =
   List.generate(1000, (index) => {"id": index, "name": "Product $index"})
@@ -158,7 +213,6 @@ class DataTableScreen extends StatelessWidget {
     }
 
   }
-
 class TabBarWidget extends StatelessWidget {
   const TabBarWidget({Key key}) : super(key: key);
   @override
@@ -179,7 +233,6 @@ class TabBarWidget extends StatelessWidget {
             Center(child: Text('It\'s rainy here')),
             Center(child: Text('It\'s sunny here') ),
           ])));}}
-
 class AppBar_leading_actions_bottom_TabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -215,12 +268,40 @@ class AppBar_leading_actions_bottom_TabBar extends StatelessWidget {
     ;
   }
 }
+
+class stepperWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text("leading_actions_bottom")),
+        body: Stepper(
+          currentStep: 1,
+          steps: [
+            Step(
+              title: Text("Step 1 title"),
+              isActive: true,
+              content: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Content for Step 1")
+              ),
+            ),
+            Step(
+              title: Text("Step 2 title"),
+              isActive: true,
+              content: Text("Content for Step 2"),
+            ),
+          ],
+        )
+
+    );
+  }
+}
+
 //===================================
 class BottomNavigationBarWidget extends StatefulWidget {
   @override
   _bottomNavigationBarState createState() => _bottomNavigationBarState();
 }
-
 class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
   int _selectedIndex = 0;
   List PagesList = [
@@ -256,7 +337,6 @@ class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
   }
 }
 //=====================================================
-
 class ListTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -321,14 +401,11 @@ class RadioListTileWidget extends StatefulWidget {
           ));
     }
   }
-
 //==================================================
-
 class TextFormField_vs_TextField_Widget extends StatefulWidget {
   @override
   _TextFormField_vs_TextField_WidgetState createState() => _TextFormField_vs_TextField_WidgetState();
 }
-
 class _TextFormField_vs_TextField_WidgetState extends State<TextFormField_vs_TextField_Widget> {
     TextEditingController txtController1 = TextEditingController();
     TextEditingController txtController2 = TextEditingController();
@@ -435,7 +512,6 @@ class _HTTPloadDataState extends State<HTTPloadData> {
     );
   }
 }
-
 //============================================
 /*
 to add validation to a form
@@ -539,8 +615,46 @@ class _FormWidgetState extends State<FormWidget> {
       );
     }
   }
-
  //=============================================
+class myCustomCalander extends StatelessWidget {
+  EventList<Event> myEventList = new EventList<Event>();
+
+  @override
+  Widget build(BuildContext context) {
+    CalendarCarousel _calendarCarousel = CalendarCarousel<Event>(
+      height: 420.0,
+      firstDayOfWeek: 6,
+      markedDatesMap: myEventList,
+      markedDateCustomShapeBorder: CircleBorder( side: BorderSide(color: Colors.pink, width: 2) ),
+      onDayPressed: (DateTime date, List<Event> events) {
+        print('onDayPressed'+date.toIso8601String());
+        events.forEach((event) => print(event.title));
+        Event event=new Event(date:date,title:"Vacation");
+        if(events.length==0) myEventList.add(date,event);
+        else myEventList.removeAll(date);
+      },
+    );
+
+    return new Scaffold(
+        appBar: new AppBar(
+          title: new Text("calendar Carousel"),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16.0),
+                child: _calendarCarousel,
+              ), //
+            ],
+          ),
+        ));
+  }
+}
+//===================================================
 class StackWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

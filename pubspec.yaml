@@ -27,6 +27,7 @@ dependencies:
   cupertino_icons:
   google_fonts:
   url_launcher: ^6.0.2
+  flutter_calendar_carousel: ^1.5.3
 
 
 dev_dependencies:
