@@ -644,6 +644,7 @@ class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
   final myController1 = TextEditingController();
   final myController2= TextEditingController();
+  final myController3= TextEditingController();
 
   List<String> _locations = ['A', 'B', 'C', 'D'];
   String _selectedLocation,_selectedLang;
@@ -654,6 +655,7 @@ class _FormWidgetState extends State<FormWidget> {
     // Clean up the controller when the widget is disposed.
     myController1.dispose();
     myController2.dispose();
+    myController3.dispose();
     super.dispose();
   }
 
@@ -668,21 +670,28 @@ class _FormWidgetState extends State<FormWidget> {
                 key: _formKey,
                 child: Column(
                   children: [
+                              TextField(
+                              controller: myController3,
+                              decoration: InputDecoration(
+                                labelText: 'Email',
+                                hintText: 'you@email.com',
+                                icon: Icon(Icons.contact_mail),
+                              )),
                               Card(
                                     color: Colors.blue[50],
                                     child: ListTile(
-                                    leading : Icon(Icons.account_box),
-                                    title : TextFormField(
-                                            controller: myController1,
-                                            validator: (value) {
-                                                                  print(value);
-                                                                  if (value.isEmpty) {
-                                                                    return 'Please enter some text';
-                                                                  }
-                                                                  else
-                                                                    return null;
-                                                                },
-                                          ))),
+                                                    leading : Icon(Icons.account_box),
+                                                    title : TextFormField(
+                                                            controller: myController1,
+                                                            validator: (value) {
+                                                                                  print(value);
+                                                                                  if (value.isEmpty) {
+                                                                                    return 'Please enter some text';
+                                                                                  }
+                                                                                  else
+                                                                                    return null;
+                                                                                },
+                                                          ))),
 
                     DropdownButton(
                       hint: Text('Please choose a location'), // Not necessary for Option 1
