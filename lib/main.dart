@@ -622,12 +622,43 @@ to add validation to a form
 2- Add Form Fields with validation logic.
 3- Create a button to validate and submit the form.
 */
+
+class Language {
+  final int id;
+  final String name;
+  final String languageCode;
+
+  const Language(this.id, this.name, this.languageCode);
+
+
+}
+
+const List<Language> getLanguages = <Language>[
+  Language(1, 'English', 'en'),
+  Language(2, 'فارسی', 'fa'),
+  Language(3, 'عربي', 'Ar'),
+];
+
 class FormWidget extends StatefulWidget {
   @override
   _FormWidgetState createState() => _FormWidgetState();
 }
 class _FormWidgetState extends State<FormWidget> {
   final _formKey = GlobalKey<FormState>();
+  final myController1 = TextEditingController();
+  final myController2= TextEditingController();
+
+  List<String> _locations = ['A', 'B', 'C', 'D'];
+  String _selectedLocation,_selectedLang;
+  bool checkedValue=false;
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    myController1.dispose();
+    myController2.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -635,28 +666,109 @@ class _FormWidgetState extends State<FormWidget> {
         appBar: AppBar(title: const Text('Form Widget')),
         body: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  TextFormField(
-                    validator: (value) {
-                      if (value.isEmpty) {
-                        return 'Please enter some text';
-                      }
-                      else
-                        return null;
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text('Submit'),
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        // submit form
-                      }
-                    },
-                  ),
-                ],
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                              Card(
+                                    color: Colors.blue[50],
+                                    child: ListTile(
+                                    leading : Icon(Icons.account_box),
+                                    title : TextFormField(
+                                            controller: myController1,
+                                            validator: (value) {
+                                                                  print(value);
+                                                                  if (value.isEmpty) {
+                                                                    return 'Please enter some text';
+                                                                  }
+                                                                  else
+                                                                    return null;
+                                                                },
+                                          ))),
+
+                    DropdownButton(
+                      hint: Text('Please choose a location'), // Not necessary for Option 1
+                      value: _selectedLocation,
+                      onChanged: (newValue) {
+                                              print(newValue);
+                                              setState(() {
+                                                _selectedLocation = newValue;
+                                              });
+                                            },
+                      items: _locations.map((location) {
+                                                        return DropdownMenuItem(
+                                                          child: new Text(location),
+                                                          value: location,
+                                                        );
+                                                      }).toList(),
+                    ),
+
+
+
+                    DropdownButton(
+                      hint: Text('Please choose a lang'), // Not necessary for Option 1
+                      value: _selectedLang,
+                      icon: Icon( Icons.language, color: Colors.blue),
+                      items: getLanguages.map((Language lang) {
+                                                                return new DropdownMenuItem<String>(
+                                                                  value: lang.languageCode,
+                                                                  child: new Text(lang.name),
+                                                                );
+                                                              }).toList(),
+
+                      onChanged: (val) {
+                                          setState(() {
+                                            _selectedLang = val;
+                                          });
+                                        },
+                    ),
+
+
+                    Card(
+                      color: Colors.pink[50],
+                      child: ListTile(
+                                      leading : Icon(Icons.content_paste),
+                                      title : TextFormField(
+                                                            keyboardType : TextInputType.multiline,
+                                                            maxLines : 8,
+                                                            decoration : InputDecoration(hintText : "Content"),
+                                                            controller : myController2,
+                                                          )
+                                  ),
+                    ),
+
+                    CheckboxListTile(
+                      title: Text("Remember me"),
+                      value: checkedValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          checkedValue = newValue;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                    ),
+
+                    ElevatedButton(
+                      child: Text('Submit'),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          // submit form
+                          print("------------------------------");
+                          print(myController1.text);
+                          print(myController2.text);
+                          print(_selectedLocation);
+                          print(checkedValue);
+                          print("------------------------------");
+                        }
+                      },
+                    ),
+
+
+
+
+                  ],
+                ),
               ),
             )));
   }
