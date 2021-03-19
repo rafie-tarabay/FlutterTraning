@@ -12,12 +12,26 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 //---------
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
+//-----------
 void main() => runApp(AppList());
 class AppList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Drawer Demo';
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(primarySwatch: Colors.yellow),
+        // theme: new ThemeData(
+        //   brightness: Brightness.light,
+          // backgroundColor: colorBackground,
+          // primaryColor: colorPrimary,
+          // accentColor: colorAccent,
+          // splashColor: colorAccent,
+          // disabledColor: colorGrey,
+        // ),
+
         title: appTitle,
         home: DrawerWidget());
   }
@@ -32,47 +46,14 @@ class DrawerWidget extends StatelessWidget {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final appTitle = 'Drawer Demo';
     return  Scaffold(
       appBar: AppBar(title: Text(appTitle)),
-      body: //Center(child: Text('Demo')),
-      SingleChildScrollView(
-        child: Column(
-          children: [
-          Card(
-          color: Colors.blue,
-          child:Padding(padding: const EdgeInsets.all(8.0),
-            child: Text('Data entry form to collect all needed information to create apointment',style: TextStyle(color: Colors.white,fontSize:20)),
-          )),
-            Card(
-              color: Colors.yellow,
-              child: ListTile(
-                  leading : Icon(Icons.arrow_forward_ios),
-                  title : TextFormField(
-                    keyboardType : TextInputType.multiline,
-                    maxLines : 2,
-                    decoration : InputDecoration(hintText : "Title"),
-                    //controller : _contentEditingController,
-                  )
-              ),
-            ),
-            Card(
-              color: Colors.pink,
-              child: ListTile(
-                  leading : Icon(Icons.content_paste),
-                  title : TextFormField(
-                                          keyboardType : TextInputType.multiline,
-                                          maxLines : 8,
-                                          decoration : InputDecoration(hintText : "Content"),
-                                          //controller : _contentEditingController,
-                                      )
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: myCustomCalander(),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -106,7 +87,13 @@ class DrawerWidget extends StatelessWidget {
             ListTile(leading: Icon(Icons.grid_on), title: Text("Website"),onTap: (){_launch('https://google.com');}),
             ListTile(leading: Icon(Icons.contacts), title: Text("Contact Us (SMS)"),onTap: (){_launch('sms:+919952313535');}),
 
-            ListTile(title: Text('myCustomCalander'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
+            //
+            ListTile(title: Text('ScaffoldWidget'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScaffoldWidget())); } ),
+            ListTile(title: Text('modalBottomSheet'),   onTap: () { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => modalBottomSheet())); } ),
+            
+            ListTile(title: Text('CustomCalander'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
+            ListTile(title: Text('Map'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myMap())); } ),
+            
             ListTile(title: Text('stepperWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => stepperWidget())); } ),
             ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
 
@@ -123,6 +110,7 @@ class DrawerWidget extends StatelessWidget {
             ListTile(title: Text('RadioListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => RadioListTileWidget())); } ),
             ListTile(title: Text('TextFormField_vs_TextField_Widget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TextFormField_vs_TextField_Widget())); } ),
             ListTile(title: Text('http + LayoutBuilder'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => HTTPloadData())); } ),
+            ListTile(title: Text('FutureBuilderDemo'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FutureBuilderDemo())); } ),
             ListTile(title: Text('FormWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FormWidget())); } ),
             ListTile(title: Text('StackWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => StackWidget())); } ),
             ListTile(title: Text('Exam'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => Exam())); } ),
@@ -131,6 +119,88 @@ class DrawerWidget extends StatelessWidget {
         ), ), );
   }
 }
+
+
+class ScaffoldWidget extends StatefulWidget {
+  @override
+  _ScaffoldWidgetState createState() => _ScaffoldWidgetState();
+}
+
+class _ScaffoldWidgetState extends State<ScaffoldWidget> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text('ListView_builderWidget')),
+        floatingActionButton: new FloatingActionButton(
+                                                        onPressed: () => {print('xxx')},
+                                                        backgroundColor: Colors.red,
+                                                        //if you set mini to true then it will make your floating button small
+                                                        mini: false,
+                                                        child: new Icon(Icons.apps),
+                                                      ),
+        //drawer:null,
+        bottomNavigationBar: new BottomNavigationBar(
+                                                      items: [
+                                                        BottomNavigationBarItem(icon: new Icon(Icons.people), label:'People'),
+                                                        BottomNavigationBarItem(icon: new Icon(Icons.weekend), label: 'Weekend'),
+                                                        BottomNavigationBarItem(icon: new Icon(Icons.message), label: 'Message')
+                                                      ],
+                                                      fixedColor: Colors.blue,
+                                                      currentIndex: _index,
+                                                      onTap: (int item){
+                                                                        setState(() {   _index = item;});
+                                                                        print("Current value is: ${_index.toString()}");
+                                                      },
+                                                    ),
+        persistentFooterButtons: <Widget>[
+                                          new IconButton(icon: new Icon(Icons.timer), onPressed: () => {print('xxx')}),
+                                          new IconButton(icon: new Icon(Icons.people), onPressed: () => {print('xxx')}),
+                                          new IconButton(icon: new Icon(Icons.map), onPressed: () => {print('xxx')}),
+                                          ],
+        body: Container()
+    );
+  }
+}
+
+////////
+class modalBottomSheet extends StatelessWidget {
+  void _show(BuildContext ctx) {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20.0) ),
+        elevation: 10,
+        backgroundColor: Colors.blue,
+        context: ctx,
+        builder: (ctx) => Container(
+          width: 300,
+          height: 250,
+          color: Colors.white54,
+          alignment: Alignment.center,
+          child: Text('Contents...'),
+        ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        bottomSheet:null,
+
+        appBar: AppBar(
+        title: Text('Modal Bottom Sheet'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ElevatedButton(
+            child: Text('Show The BottomSheet'),
+            onPressed: () => _show(context),
+          ),
+        ),
+      ),
+    );
+  }
+}
+//
 class ListView_builderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -616,6 +686,85 @@ class _HTTPloadDataState extends State<HTTPloadData> {
   }
 }
 //============================================
+class FutureBuilderDemo  extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text("FutureBuilder + http")),
+
+        body: FutureBuilder(
+            future: http.get(Uri.parse('https://reqres.in/api/users')),
+            builder: (BuildContext ctx, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return CircularProgressIndicator();
+              }
+              if (snapshot.hasError) {
+                return Text('Oh no! Error! ${snapshot.error}');
+              }
+              if (!snapshot.hasData) {
+                return Text('Nothing to show');
+              }
+
+              int statusCode = snapshot.data.statusCode;
+              if (statusCode > 299) {
+                return Text('Server error: $statusCode');
+              }
+
+              Map userData = json.decode(snapshot.data.body);
+              print(userData);
+              List _users = userData["data"];
+              print(_users);
+
+              return ListView.builder(
+                itemCount: _users.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    leading: CircleAvatar(
+                        backgroundImage: NetworkImage(_users[index]['avatar'])),
+                    title: Text(_users[index]['first_name'] + " " +
+                        _users[index]['last_name']),
+                    subtitle: Text(_users[index]['email']),
+                  );
+                },
+              );
+            }));
+  }
+}
+
+//========================================
+class myMap extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(title: Text("MAP")),
+
+    body:FlutterMap(
+      options: MapOptions(
+        center: LatLng(30.0,31.0),
+        zoom: 13.0,
+      ),
+      layers: [
+        TileLayerOptions(
+            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            subdomains: ['a', 'b', 'c']
+        ),
+        MarkerLayerOptions(
+          markers: [
+            Marker(
+              width: 80.0,
+              height: 80.0,
+              point: LatLng(30.0,31.0),
+              builder: (ctx) =>  Icon(Icons.location_on,color: Colors.red,size: 30.0,),
+            ),
+          ],
+        ),
+      ],
+    ));
+  }
+}
+
+
+//===========================================
 /*
 to add validation to a form
 1- Create a Form with a GlobalKey.
@@ -645,6 +794,7 @@ class _FormWidgetState extends State<FormWidget> {
   final myController1 = TextEditingController();
   final myController2= TextEditingController();
   final myController3= TextEditingController();
+  final myController4= TextEditingController();
 
   List<String> _locations = ['A', 'B', 'C', 'D'];
   String _selectedLocation,_selectedLang;
@@ -656,6 +806,7 @@ class _FormWidgetState extends State<FormWidget> {
     myController1.dispose();
     myController2.dispose();
     myController3.dispose();
+    myController4.dispose();
     super.dispose();
   }
 
@@ -672,11 +823,23 @@ class _FormWidgetState extends State<FormWidget> {
                   children: [
                               TextField(
                               controller: myController3,
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 hintText: 'you@email.com',
                                 icon: Icon(Icons.contact_mail),
                               )),
+
+                              TextField(
+                                  controller: myController4,
+                                  keyboardType: TextInputType.number,
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Password',
+                                    hintText: 'Use numbers only',
+                                    icon: Icon(Icons.adjust),
+                                  )),
+
                               Card(
                                     color: Colors.blue[50],
                                     child: ListTile(
@@ -754,6 +917,14 @@ class _FormWidgetState extends State<FormWidget> {
                       },
                       controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
                     ),
+
+                    Switch(
+                            value: checkedValue,
+                            onChanged: (newValue) {
+                              setState(() {
+                                checkedValue = newValue;
+                              });
+                            },),
 
                     ElevatedButton(
                       child: Text('Submit'),
@@ -843,6 +1014,7 @@ class myCustomCalander extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     CalendarCarousel _calendarCarousel = CalendarCarousel<Event>(
+      width: 420.0,
       height: 420.0,
       firstDayOfWeek: 6,
       markedDatesMap: myEventList,
@@ -850,8 +1022,11 @@ class myCustomCalander extends StatelessWidget {
       onDayPressed: (DateTime date, List<Event> events) {
         print('onDayPressed'+date.toIso8601String());
         events.forEach((event) => print(event.title));
-        Event event=new Event(date:date,title:"Vacation");
-        if(events.length==0) myEventList.add(date,event);
+
+        if(events.length==0){
+          Event event=new Event(date:date,title:"Vacation");
+          myEventList.add(date,event);
+        }
         else myEventList.removeAll(date);
       },
     );
@@ -862,8 +1037,8 @@ class myCustomCalander extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
 
               Container(
