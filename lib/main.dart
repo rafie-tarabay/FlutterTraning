@@ -16,6 +16,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 //-----------
 void main() => runApp(AppList());
+
 class AppList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -53,22 +54,13 @@ class DrawerWidget extends StatelessWidget {
     final appTitle = 'Drawer Demo';
     return  Scaffold(
       appBar: AppBar(title: Text(appTitle)),
-      body: myCustomCalander(),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+      body:  SingleChildScrollView(
+        child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.stretch,
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            DrawerHeader(child: FittedBox(fit: BoxFit.fill,
-                child: Image.network('https://i.ibb.co/df35Y8Q/2.png')) ),
 
-            InkWell(
-              onTap: () async { },
-              child: Chip(
-                  avatar : CircleAvatar(backgroundImage : AssetImage("img/ron.jpg")),
-                  backgroundColor : Colors.grey.shade300,
-                  label : Text("Active Status")
-              ),
-            ),
+            FittedBox(fit: BoxFit.fill,child: Image.network('https://i.ibb.co/df35Y8Q/2.png')),
 
             ListTile(
               leading: CircleAvatar(backgroundImage: NetworkImage("https://i1.wp.com/codesundar.com/avicon.png")),
@@ -83,36 +75,98 @@ class DrawerWidget extends StatelessWidget {
                   ]
               ),
             ),
+
             ListTile(leading: Icon(Icons.home), title: Text("Home Tel"),onTap: (){_launch('tel:+919952313535');},),
             ListTile(leading: Icon(Icons.grid_on), title: Text("Website"),onTap: (){_launch('https://google.com');}),
             ListTile(leading: Icon(Icons.contacts), title: Text("Contact Us (SMS)"),onTap: (){_launch('sms:+919952313535');}),
 
-            //
-            ListTile(title: Text('ScaffoldWidget'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScaffoldWidget())); } ),
-            ListTile(title: Text('modalBottomSheet'),   onTap: () { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => modalBottomSheet())); } ),
-            
-            ListTile(title: Text('CustomCalander'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
-            ListTile(title: Text('Map'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myMap())); } ),
-            
-            ListTile(title: Text('stepperWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => stepperWidget())); } ),
-            ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
 
+            Card(
+              margin: EdgeInsets.all(10),
+              color:Colors.lightGreen,
+              child: Center(heightFactor:3,child: Text('Body',style: TextStyle(color: Colors.white),)),
+            ),
+
+
+            Dismissible(
+              background: Container(alignment: Alignment.centerLeft ,color: Colors.red, child: Icon(Icons.apps),),
+              secondaryBackground: Container(alignment: Alignment.centerRight,color: Colors.red, child: Icon(Icons.account_box),),
+              onDismissed: (direction) {
+                print("You swiped $direction");
+              },
+              key:Key("xx"),
+              child: Card(
+                margin: EdgeInsets.all(10),
+                color:Colors.pink,
+                child: Center(heightFactor:3,child: Text('Body',style: TextStyle(color: Colors.white),)),
+              ),
+            ),
+
+
+
+            Dismissible(
+              background: Container(alignment: Alignment.centerLeft ,color: Colors.red, child: Icon(Icons.apps),),
+              secondaryBackground: Container(alignment: Alignment.centerRight,color: Colors.red, child: Icon(Icons.account_box),),
+              onDismissed: (direction) {
+                print("You swiped $direction");
+              },
+              key:Key("xy"),
+              child: Card(
+                margin: EdgeInsets.all(10),
+                color:Colors.yellow,
+                child: Center(heightFactor:3,child: Text('Body',style: TextStyle(color: Colors.black),)),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+
+
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            //DrawerHeader(child: null ),
+
+            InkWell(
+              onTap: () async { },
+              child: Chip(
+                  avatar : CircleAvatar(backgroundImage : AssetImage("img/ron.jpg")),
+                  backgroundColor : Colors.grey.shade300,
+                  label : Text("Active Status")
+              ),
+            ),
+
+
+            ListTile(title: Text('ScaffoldHeaderFooter'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ScaffoldHeaderFooter())); } ),
+            ListTile(title: Text('AppBar:TabBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TabBarWidget())); } ),
+            ListTile(title: Text('AppBar_leading_actions_bottom_TabBar'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AppBar_leading_actions_bottom_TabBar())); } ),
+
+            ListTile(title: Text('BottomNavigationBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => BottomNavigationBarWidget())); } ),
+            //--------------------
+            ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
             ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
             ListTile(title: Text('GridViewBuilderScreen2'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen2())); } ),
-
             ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
             ListTile(title: Text('DataTableScreen'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => DataTableScreen())); } ),
-            ListTile(title: Text('TabBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TabBarWidget())); } ),
-            ListTile(title: Text('AppBar_leading_actions_bottom_TabBar'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AppBar_leading_actions_bottom_TabBar())); } ),
-            ListTile(title: Text('BottomNavigationBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => BottomNavigationBarWidget())); } ),
-            ListTile(title: Text('ListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => ListTileWidget())); } ),
+            //--------------------
             ListTile(title: Text('AlertDialog_SnackBar_Button'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => AlertDialog_SnackBar_Button())); } ),
+            ListTile(title: Text('modalBottomSheet'),   onTap: () { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => modalBottomSheet())); } ),
+            //--------------
+            ListTile(title: Text('FormWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FormWidget())); } ),
             ListTile(title: Text('RadioListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => RadioListTileWidget())); } ),
             ListTile(title: Text('TextFormField_vs_TextField_Widget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => TextFormField_vs_TextField_Widget())); } ),
+            //--------------
             ListTile(title: Text('http + LayoutBuilder'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => HTTPloadData())); } ),
             ListTile(title: Text('FutureBuilderDemo'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FutureBuilderDemo())); } ),
-            ListTile(title: Text('FormWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => FormWidget())); } ),
+            //------------
             ListTile(title: Text('StackWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => StackWidget())); } ),
+            //------------
+            ListTile(title: Text('ListTileWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => ListTileWidget())); } ),
+            ListTile(title: Text('CustomCalander'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myCustomCalander())); } ),
+            ListTile(title: Text('Map'),   onTap: ()   { Navigator.of(context).pop(); Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => myMap())); } ),
+            ListTile(title: Text('stepperWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => stepperWidget())); } ),
             ListTile(title: Text('Exam'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => Exam())); } ),
 
           ],
@@ -120,49 +174,152 @@ class DrawerWidget extends StatelessWidget {
   }
 }
 
-
-class ScaffoldWidget extends StatefulWidget {
-  @override
-  _ScaffoldWidgetState createState() => _ScaffoldWidgetState();
-}
-
-class _ScaffoldWidgetState extends State<ScaffoldWidget> {
-  int _index = 0;
-
+class ScaffoldHeaderFooter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text('ListView_builderWidget')),
         floatingActionButton: new FloatingActionButton(
-                                                        onPressed: () => {print('xxx')},
-                                                        backgroundColor: Colors.red,
-                                                        //if you set mini to true then it will make your floating button small
-                                                        mini: false,
-                                                        child: new Icon(Icons.apps),
-                                                      ),
+          onPressed: () => {print('xxx')},
+          backgroundColor: Colors.red,
+          //if you set mini to true then it will make your floating button small
+          mini: false,
+          child: new Icon(Icons.apps),
+        ),
         //drawer:null,
         bottomNavigationBar: new BottomNavigationBar(
-                                                      items: [
-                                                        BottomNavigationBarItem(icon: new Icon(Icons.people), label:'People'),
-                                                        BottomNavigationBarItem(icon: new Icon(Icons.weekend), label: 'Weekend'),
-                                                        BottomNavigationBarItem(icon: new Icon(Icons.message), label: 'Message')
-                                                      ],
-                                                      fixedColor: Colors.blue,
-                                                      currentIndex: _index,
-                                                      onTap: (int item){
-                                                                        setState(() {   _index = item;});
-                                                                        print("Current value is: ${_index.toString()}");
-                                                      },
-                                                    ),
+          currentIndex: 0,
+          items: [
+            BottomNavigationBarItem(icon: new Icon(Icons.people), label:'People'),
+            BottomNavigationBarItem(icon: new Icon(Icons.weekend), label: 'Weekend'),
+            BottomNavigationBarItem(icon: new Icon(Icons.message), label: 'Message')
+          ],
+          fixedColor: Colors.blue,
+          onTap: (int buttonIndex){
+            print("Current value is: ${buttonIndex.toString()}");
+          },
+        ),
+        /*
         persistentFooterButtons: <Widget>[
-                                          new IconButton(icon: new Icon(Icons.timer), onPressed: () => {print('xxx')}),
-                                          new IconButton(icon: new Icon(Icons.people), onPressed: () => {print('xxx')}),
-                                          new IconButton(icon: new Icon(Icons.map), onPressed: () => {print('xxx')}),
-                                          ],
+          new IconButton(icon: new Icon(Icons.timer), onPressed: () => {print('xxx')}),
+          new IconButton(icon: new Icon(Icons.people), onPressed: () => {print('xxx')}),
+          new IconButton(icon: new Icon(Icons.map), onPressed: () => {print('xxx')}),
+        ],
+        */
         body: Container()
     );
   }
 }
+
+class AppBar_leading_actions_bottom_TabBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("leading_actions_bottom"),
+          //leading: Icon(Icons.menu),
+          backgroundColor: Colors.cyan[100],
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.search), onPressed: () => { }),
+            IconButton(icon: Icon(Icons.more_vert), onPressed: () => { })
+          ],
+          bottom: TabBar(
+            indicatorColor: Colors.yellow,
+            tabs: <Widget>[
+              Tab(text: "Chats", icon:  Icon(Icons.chat)),
+              Tab(text: "Groups", icon: Icon(Icons.group)),
+              Tab(text: "Settings", icon: Icon(Icons.settings))
+            ],
+          ),
+        ),
+        body: TabBarView(
+          children: <Widget>[
+            Center(child: Text("Chat Tab")),
+            Center(child: Text("Group Tab")),
+            Center(child: Text("Settings Tab")),
+          ],
+        ),
+      ),
+    )
+    ;
+  }
+}
+
+class TabBarWidget extends StatelessWidget {
+  const TabBarWidget({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(initialIndex: 1,length: 3,
+        child: Scaffold(
+            appBar: AppBar(
+              title: const Text('TabBar Widget'),
+              bottom: const TabBar(
+                tabs: <Widget>[
+                  Tab(text:'xxxx',icon: Icon(Icons.cloud_outlined)),
+                  Tab(icon: Icon(Icons.beach_access_sharp)),
+                  Tab(icon: Icon(Icons.brightness_5_sharp)),
+                ], ),),
+            body: const TabBarView(
+                children: <Widget>[
+                  Center(child: Text('It\'s cloudy here')),
+                  Center(child: Text('It\'s rainy here')),
+                  Center(child: Text('It\'s sunny here') ),
+                ])));}}
+
+//===================================
+class BottomNavigationBarWidget extends StatefulWidget {
+  @override
+  _bottomNavigationBarState createState() => _bottomNavigationBarState();
+}
+class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
+  int _selectedIndex = 0;
+  List PagesList = [
+    Text('Home Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Profile Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+    Text('Settings Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
+  ];
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          title: const Text('BottomNavigationBar Example'),
+          backgroundColor: Colors.teal
+      ),
+      body: Center(
+        child: PagesList[_selectedIndex],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items:[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home' ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(() {  _selectedIndex = index;  });
+        },
+      ),
+    );
+  }
+}
+//=====================================================
+
+
+
+
+
+
+
+
+
+
+
+
 
 ////////
 class modalBottomSheet extends StatelessWidget {
@@ -379,61 +536,7 @@ class DataTableScreen extends StatelessWidget {
     }
 
   }
-class TabBarWidget extends StatelessWidget {
-  const TabBarWidget({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(initialIndex: 1,length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('TabBar Widget'),
-          bottom: const TabBar(
-            tabs: <Widget>[
-              Tab(text:'xxxx',icon: Icon(Icons.cloud_outlined)),
-              Tab(icon: Icon(Icons.beach_access_sharp)),
-              Tab(icon: Icon(Icons.brightness_5_sharp)),
-            ], ),),
-        body: const TabBarView(
-          children: <Widget>[
-            Center(child: Text('It\'s cloudy here')),
-            Center(child: Text('It\'s rainy here')),
-            Center(child: Text('It\'s sunny here') ),
-          ])));}}
-class AppBar_leading_actions_bottom_TabBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("leading_actions_bottom"),
-          leading: Icon(Icons.menu),
-          backgroundColor: Colors.teal[700],
-          actions: <Widget>[
-            IconButton(icon: Icon(Icons.search), onPressed: () => { }),
-            IconButton(icon: Icon(Icons.more_vert), onPressed: () => { })
-          ],
-          bottom: TabBar(
-            indicatorColor: Colors.yellow,
-            tabs: <Widget>[
-              Tab(text: "Chats", icon:  Icon(Icons.chat)),
-              Tab(text: "Groups", icon: Icon(Icons.group)),
-              Tab(text: "Settings", icon: Icon(Icons.settings))
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            Center(child: Text("Chat Tab")),
-            Center(child: Text("Group Tab")),
-            Center(child: Text("Settings Tab")),
-          ],
-        ),
-      ),
-    )
-    ;
-  }
-}
+
 
 class stepperWidget extends StatelessWidget {
   @override
@@ -463,46 +566,7 @@ class stepperWidget extends StatelessWidget {
   }
 }
 
-//===================================
-class BottomNavigationBarWidget extends StatefulWidget {
-  @override
-  _bottomNavigationBarState createState() => _bottomNavigationBarState();
-}
-class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
-  int _selectedIndex = 0;
-  List PagesList = [
-    Text('Home Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Profile Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-    Text('Settings Screen', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold)),
-  ];
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: const Text('BottomNavigationBar Example'),
-          backgroundColor: Colors.teal
-      ),
-      body: Center(
-        child: PagesList[_selectedIndex],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-          items:[
-                  BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home' ),
-                  BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-                  BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
-                ],
-          currentIndex: _selectedIndex,
-          onTap: (int index) {
-            setState(() {  _selectedIndex = index;  });
-          },
-      ),
-    );
-  }
-}
-//=====================================================
+//---------------------------------------------
 class ListTileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
