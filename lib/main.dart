@@ -23,7 +23,7 @@ class AppList extends StatelessWidget {
     final appTitle = 'Drawer Demo';
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.yellow),
+        theme: ThemeData(primarySwatch: Colors.indigo),
         // theme: new ThemeData(
         //   brightness: Brightness.light,
           // backgroundColor: colorBackground,
@@ -60,10 +60,10 @@ class DrawerWidget extends StatelessWidget {
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
 
-            FittedBox(fit: BoxFit.fill,child: Image.network('https://i.ibb.co/df35Y8Q/2.png')),
+            Container(height:300,width: double.infinity,child: Image.network('https://i.ibb.co/df35Y8Q/2.png',fit: BoxFit.fill,)),
 
             ListTile(
-              leading: CircleAvatar(backgroundImage: NetworkImage("https://i1.wp.com/codesundar.com/avicon.png")),
+              leading: CircleAvatar(backgroundImage: NetworkImage("https://reqres.in/img/faces/1-image.jpg")),
               title: Text("Rafie Tarabay"),
               subtitle: Text("eng_rafie@mans.edu.eg"),
               trailing: PopupMenuButton(
@@ -77,14 +77,14 @@ class DrawerWidget extends StatelessWidget {
             ),
 
             ListTile(leading: Icon(Icons.home), title: Text("Home Tel"),onTap: (){_launch('tel:+919952313535');},),
-            ListTile(leading: Icon(Icons.grid_on), title: Text("Website"),onTap: (){_launch('https://google.com');}),
+            ListTile(leading: Icon(Icons.arrow_right), title: Text("Website"),onTap: (){_launch('https://google.com');}),
             ListTile(leading: Icon(Icons.contacts), title: Text("Contact Us (SMS)"),onTap: (){_launch('sms:+919952313535');}),
 
 
             Card(
               margin: EdgeInsets.all(10),
               color:Colors.lightGreen,
-              child: Center(heightFactor:3,child: Text('Body',style: TextStyle(color: Colors.white),)),
+              child: Center(heightFactor:3,child: Text('Body',style: TextStyle(color: Colors.white,fontSize: 20),)),
             ),
 
 
@@ -127,12 +127,14 @@ class DrawerWidget extends StatelessWidget {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            //DrawerHeader(child: null ),
+            DrawerHeader(child: FittedBox(fit: BoxFit.fill,
+                child: Image.network('https://i.ibb.co/df35Y8Q/2.png')) ),
+
 
             InkWell(
               onTap: () async { },
               child: Chip(
-                  avatar : CircleAvatar(backgroundImage : AssetImage("img/ron.jpg")),
+                  avatar : CircleAvatar(backgroundColor: Colors.green,),
                   backgroundColor : Colors.grey.shade300,
                   label : Text("Active Status")
               ),
@@ -146,6 +148,13 @@ class DrawerWidget extends StatelessWidget {
             ListTile(title: Text('BottomNavigationBarWidget'),  onTap: () {  Navigator.push(context, MaterialPageRoute( builder: (context) => BottomNavigationBarWidget())); } ),
             //--------------------
             ListTile(title: Text('ListView_builderWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => ListView_builderWidget())); } ),
+
+            ListTile(title: Text('BackgroundIMG'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => BackgroundIMG())); } ),
+            ListTile(title: Text('GridViewForloopListWidget'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewForloopListWidget())); } ),
+            //
+            //
+
+
             ListTile(title: Text('GridViewBuilderScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen())); } ),
             ListTile(title: Text('GridViewBuilderScreen2'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewBuilderScreen2())); } ),
             ListTile(title: Text('GridViewCountScreen'),   onTap: () {  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => GridViewCountScreen())); } ),
@@ -182,8 +191,6 @@ class ScaffoldHeaderFooter extends StatelessWidget {
         floatingActionButton: new FloatingActionButton(
           onPressed: () => {print('xxx')},
           backgroundColor: Colors.red,
-          //if you set mini to true then it will make your floating button small
-          mini: false,
           child: new Icon(Icons.apps),
         ),
         //drawer:null,
@@ -195,9 +202,7 @@ class ScaffoldHeaderFooter extends StatelessWidget {
             BottomNavigationBarItem(icon: new Icon(Icons.message), label: 'Message')
           ],
           fixedColor: Colors.blue,
-          onTap: (int buttonIndex){
-            print("Current value is: ${buttonIndex.toString()}");
-          },
+          onTap: (int buttonIndex){print("Current value is: ${buttonIndex.toString()}");},
         ),
         /*
         persistentFooterButtons: <Widget>[
@@ -309,8 +314,126 @@ class _bottomNavigationBarState extends State<BottomNavigationBarWidget> {
 }
 //=====================================================
 
+class Location {
+  final String text,timing,weather,imageUrl;
+  final int temperature;
+  Location({ this.text,  this.timing,  this.temperature, this.weather, this.imageUrl,   });
+}
+class BackgroundIMG extends StatelessWidget {
+  final locations = [
+    Location(text: 'New York',timing: '10:44 am',temperature: 15, weather: 'Cloudy',imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
+    Location(text: 'San Francisco', timing: '7:44 am', temperature: 6, weather: 'Raining', imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+  ];
 
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    return  Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          for (var location in locations)
+            ClipRRect(borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                  height:300,
+                  width: 250,
+                  decoration: BoxDecoration(image:DecorationImage(image:NetworkImage(location.imageUrl),fit: BoxFit.cover)),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 40),
+                      Text(location.text, style: TextStyle(color: Colors.white, fontSize: 30,fontWeight: FontWeight.bold)),
+                      Text(location.timing, style: TextStyle(color: Colors.white, fontSize: 20)),
+                      SizedBox(height: 40),
+                      Text(location.temperature.toString() + '°',style: TextStyle(color: Colors.white,fontSize: 40)),
+                      SizedBox(height: 50),
+                      Text(location.weather, style: TextStyle(color: Colors.white, fontSize: 20)),
+                    ],
+                  ),
+                ))
+        ]);
+  }
+}
+//===========================
+class GridViewForloopListWidget extends StatelessWidget {
 
+  final locations = [
+    Location(
+      text: 'New York',
+      timing: '10:44 am',
+      temperature: 15,
+      weather: 'Cloudy',
+      imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+    Location(
+      text: 'San Francisco',
+      timing: '7:44 am',
+      temperature: 6,
+      weather: 'Raining',
+      imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return  GridView.count(
+        crossAxisCount: 3,
+        padding: EdgeInsets.all(10.0),
+        childAspectRatio: 0.8 , //   width/height
+        mainAxisSpacing: 5,
+        crossAxisSpacing: 5,
+
+        children: [
+          for (var location in locations)
+            ClipRRect(borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                    decoration: BoxDecoration(
+                        image:DecorationImage(
+                            image:NetworkImage(location.imageUrl),
+                            fit: BoxFit.cover)),
+                    child: Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Text(location.text,
+                              style: TextStyle(color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold)),
+                        ]))) ]);
+  }
+}
+//====================
 
 
 
@@ -1235,8 +1358,13 @@ class Foreground extends StatelessWidget {
     );
   }
 }
-class ImgRow extends StatelessWidget {
 
+class Location {
+  final String text,timing,weather,imageUrl;
+  final int temperature;
+  Location({ this.text,  this.timing,  this.temperature, this.weather, this.imageUrl,   });
+}
+class ImgRow extends StatelessWidget {
   final locations = [
     Location(text: 'New York',timing: '10:44 am',temperature: 15, weather: 'Cloudy',imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
     Location(text: 'San Francisco', timing: '7:44 am', temperature: 6, weather: 'Raining', imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
@@ -1269,11 +1397,7 @@ class ImgRow extends StatelessWidget {
                 )]))]);
   }
 }
-class Location {
-  final String text,timing,weather,imageUrl;
-  final int temperature;
-  Location({ this.text,  this.timing,  this.temperature, this.weather, this.imageUrl,   });
-}
+
 //=========================================
 final _questions = const [
   {
@@ -1360,4 +1484,19 @@ class Current
 {
   static int currentQindex=0;
   static int currentScore=0;
+}
+
+class cardDesign extends StatelessWidget {
+  String CardTxt;
+  cardDesign(this.CardTxt);
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      Card(margin: EdgeInsets.all(10), color:Colors.orange,
+        child:Center(
+            heightFactor:2,
+            child:Text(CardTxt,
+            style: TextStyle(color: Colors.white,fontSize: 20))));
+  }
 }
