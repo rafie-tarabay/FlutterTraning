@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+void main() { runApp(MyApp1());}
+class MyApp1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp( home: Scaffold(body: ImgRow() ) );
+  }
+}
+
+class Location {
+  final String text,timing,weather,imageUrl;
+  final int temperature;
+  Location({ this.text,  this.timing,  this.temperature, 
+             this.weather, this.imageUrl,   });
+}
+class ImgRow extends StatelessWidget {
+  final locations = [
+    Location(text: 'New York',timing: '10:44 am',temperature: 15, 
+             weather: 'Cloudy',imageUrl: 'https://i.ibb.co/df35Y8Q/2.png',),
+    Location(text: 'San Francisco', timing: '7:44 am', temperature: 6, 
+             weather: 'Raining', imageUrl: 'https://i.ibb.co/7WyTr6q/3.png',),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return  GridView.count(
+        crossAxisCount: 2,
+        padding: EdgeInsets.all(10.0),mainAxisSpacing: 5, crossAxisSpacing: 5,
+        childAspectRatio: 0.8 , //   width/height
+        children: [
+          for (var location in locations)
+            ClipRRect(borderRadius: BorderRadius.circular(8.0),
+                child: Container(
+                    decoration: BoxDecoration(
+                        image:DecorationImage(
+                            image:NetworkImage(location.imageUrl),
+                            fit: BoxFit.cover)),
+                    child: Column(
+                        children: [
+                          SizedBox(height: 30),
+                          Text(location.text,
+                              style: TextStyle(color: Colors.white,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold)),
+                        ]))) ]);
+  }
+}
+
